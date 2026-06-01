@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "node-demo-app"
-        DOCKER_REPO = "dhawalekartik540-glitch/node-demo-sample"
+        DOCKER_REPO = "dhawalekartik540/node-demo-sample"
         CONTAINER_NAME = "node-demo-container"
     }
 
