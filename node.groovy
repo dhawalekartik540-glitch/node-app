@@ -2,19 +2,20 @@ pipeline {
     agent any
     
     tools {
-        nodejs 'NodeJS-20'
+        nodejs 'nodejs'
     }
 
     environment {
         IMAGE_NAME = "node-demo-app"
-        DOCKER_REPO = "mayurmwagh/node-demo-sample"
+        DOCKER_REPO = "dhawalekartik540-glitch/node-demo-sample"
         CONTAINER_NAME = "node-demo-container"
     }
+
     stages {
         stage('checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/mayurmwagh/node-app.git'
+                    url: 'https://github.com/dhawalekartik540-glitch/node-app.git'
             }
         }
     
@@ -32,36 +33,41 @@ pipeline {
                 '''
             }
         }
+
         stage('Install Dependencies') {
             steps {
-                sh 'npm install' 
+                sh 'npm install'
             }
         }
+
         stage('Run Tests') {
             steps {
                 sh 'npm test'
             }
         }
+
         stage('Build Docker Image') {
             steps {
                 sh '''
                 docker build -t ${DOCKER_REPO}:${BUILD_NUMBER} .
-                ''' 
+                '''
             }
         }
+
         stage('Docker Login') {
             steps {
                 withCredentials([
                     usernamePassword(
                         credentialsId: 'dockerhub-creds',
                         usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKER_PASSORD'
+                        passwordVariable: 'DOCKER_PASSWORD'
                     )
                 ]) {
                     sh 'docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}'
                 }
             }
         }
+
         stage('Push Docker Image') {
             steps {
                 sh '''
@@ -69,6 +75,7 @@ pipeline {
                 '''
             }
         }
+
         stage('Deploy Container') {
             steps {
                 sh '''
@@ -82,5 +89,4 @@ pipeline {
             }
         }
     }
-}       
-
+}
