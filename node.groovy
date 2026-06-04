@@ -4,7 +4,7 @@ pipeline {
     }
     
     tools {
-        nodejs 'nodejs'
+        node-demo 'nodejs'
     }
 
     environment {
