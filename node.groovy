@@ -20,6 +20,26 @@ pipeline {
                     url: 'https://github.com/dhawalekartik540-glitch/node-app.git'
             }
         }
+        stage('Docker Debug') {
+      steps {
+        sh '''
+        echo "Current User:"
+        whoami
+
+        echo "User Details:"
+        id
+
+        echo "Groups:"
+        groups
+
+        echo "Docker Socket:"
+        ls -l /var/run/docker.sock
+
+        echo "Docker Test:"
+        docker ps || true
+        '''
+          }
+        }
             
     
         stage('Verify Environment') {
