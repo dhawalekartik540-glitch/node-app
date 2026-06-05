@@ -1,10 +1,10 @@
 pipeline {
-    agent{
+    agent {
         label 'node'
     }
     
     tools {
-        nodejs 'nodejs'
+        nodejs 'NodeJS'
     }
 
     environment {
@@ -12,36 +12,13 @@ pipeline {
         DOCKER_REPO = "naachiketdhoble020904/node-demo-sample"
         CONTAINER_NAME = "node-demo-container"
     }
-
     stages {
         stage('checkout') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/dhawalekartik540-glitch/node-app.git'
             }
-        }
-        stage('Docker Debug') {
-      steps {
-        sh '''
-        echo "Current User:"
-        whoami
-
-        echo "User Details:"
-        id
-
-        echo "Groups:"
-        groups
-
-        echo "Docker Socket:"
-        ls -l /var/run/docker.sock
-
-        echo "Docker Test:"
-        docker ps || true
-        '''
-          }
-        }
-            
-    
+        }    
         stage('Verify Environment') {
             steps {
                 sh '''
@@ -56,32 +33,28 @@ pipeline {
                 '''
             }
         }
-
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npm install' 
             }
         }
-
         stage('Run Tests') {
             steps {
                 sh 'npm test'
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 sh '''
                 docker build -t ${DOCKER_REPO}:${BUILD_NUMBER} .
-                '''
+                ''' 
             }
         }
-
         stage('Docker Login') {
             steps {
                 withCredentials([
                     usernamePassword(
-                        credentialsId: 'dockerhub-credentials',
+                        credentialsId: '626460db-bf4f-41a8-86b7-e03f88673be7',
                         usernameVariable: 'DOCKER_USERNAME',
                         passwordVariable: 'DOCKER_PASSWORD'
                     )
@@ -90,7 +63,6 @@ pipeline {
                 }
             }
         }
-
         stage('Push Docker Image') {
             steps {
                 sh '''
@@ -98,7 +70,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Deploy Container') {
             steps {
                 sh '''
@@ -112,4 +83,4 @@ pipeline {
             }
         }
     }
-}
+}       
