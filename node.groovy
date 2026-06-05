@@ -1,5 +1,5 @@
 pipeline {
-   agent any
+    agent any
     
     tools {
         nodejs 'nodejs'
@@ -14,9 +14,10 @@ pipeline {
         stage('checkout') {
             steps {
                 git branch: 'main',
-                    url: 'https://github.com/dhawalekartik540-glitch/node-app.git'
+                    url: 'https://github.com/waghvedant1990/node-js.git'
             }
-        }    
+        }
+    
         stage('Verify Environment') {
             steps {
                 sh '''
